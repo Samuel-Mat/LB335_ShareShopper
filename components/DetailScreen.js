@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   Pressable,
+  ScrollView,
 } from "react-native";
 import { initializeApp } from "firebase/app";
 import { useState, useEffect } from "react";
@@ -206,130 +207,143 @@ export default function DetailScreen({ navigateBack, listdata }) {
   }, [removedProduct]);
 
   return (
-    <View style={styles.content}>
-      <ChangeListNameModal
-        visibility={changeNameVisibility}
-        id={listdata}
-        setVisibility={setChangeNameVisibility}
-        reload={getData}
-      ></ChangeListNameModal>
-      <AddUserModal
-        visibility={addUserVisibility}
-        id={listdata}
-        setVisibility={setAddUserVisibility}
-        reload={getData}
-      ></AddUserModal>
-      <AddLocationModal
-        visibility={addLocationVisibility}
-        id={listdata}
-        setVisibility={setAddLocationVisibility}
-        reload={getData}
-      ></AddLocationModal>
-      <AddProductModal
-        visibility={addProductVisibility}
-        id={listdata}
-        setVisibility={setAddProductVisibility}
-        locations={productLocations}
-        reload={getData}
-      ></AddProductModal>
-      <View style={styles.headerBar}>
-        <Text style={styles.header}>{list.Name}</Text>
-        <Pressable
-          style={styles.changeNamebtn}
-          onPress={() => {
-            setChangeNameVisibility(true);
-          }}
-        >
-          <Image
-            style={styles.changeNameImg}
-            source={require("../assets/edit.png")}
-          ></Image>
-        </Pressable>
-      </View>
-      <View style={styles.locationBar}>
-        <SelectDropdown
-          defaultButtonText="Set Location"
-          buttonTextStyle={styles.dropdownText}
-          rowTextStyle={styles.dropdownText}
-          dropdownStyle={styles.dropdown}
-          rowStyle={styles.dropdownRow}
-          buttonStyle={styles.dropdown}
-          data={list.Orte}
-          onSelect={(selectedItem, index) => {
-            setPlace(selectedItem);
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem.Name;
-          }}
-          rowTextForSelection={(item, index) => {
-            return item.Name;
-          }}
-        />
-        <Pressable
-          style={styles.addLocbtn}
-          onPress={() => {
-            setAddLocationVisibility(true);
-          }}
-        >
-          <Text style={styles.addLocText}>Add Loc</Text>
-        </Pressable>
-      </View>
-      <View style={styles.centered}>
-        <View style={styles.main}>
-          <FlatList
-            style={styles.list}
-            data={produkte}
-            renderItem={({ item }) => (
-              <View style={styles.container}>
-                <Checkbox
-                  style={styles.check}
-                  value={item.Gekauft}
-                  onValueChange={async (value) => {
-                    await ChangeGekauft(value, item);
-                  }}
-                ></Checkbox>
-                <Text style={styles.itemText}>
-                  {item.Menge} {item.Name} | {item.Ort}
-                </Text>
-                <Pressable
-                  onPress={async () => {
-                    setDelete(item);
-                  }}
-                >
-                  <Image
-                    style={styles.delete}
-                    source={require("../assets/delete.png")}
-                  ></Image>
-                </Pressable>
-              </View>
-            )}
+    <ScrollView style={styles.scrollV}>
+      <View style={styles.content}>
+        <ChangeListNameModal
+          visibility={changeNameVisibility}
+          id={listdata}
+          setVisibility={setChangeNameVisibility}
+          reload={getData}
+        ></ChangeListNameModal>
+        <AddUserModal
+          visibility={addUserVisibility}
+          id={listdata}
+          setVisibility={setAddUserVisibility}
+          reload={getData}
+        ></AddUserModal>
+        <AddLocationModal
+          visibility={addLocationVisibility}
+          id={listdata}
+          setVisibility={setAddLocationVisibility}
+          reload={getData}
+        ></AddLocationModal>
+        <AddProductModal
+          visibility={addProductVisibility}
+          id={listdata}
+          setVisibility={setAddProductVisibility}
+          locations={productLocations}
+          reload={getData}
+        ></AddProductModal>
+        <View style={styles.headerBar}>
+          <Text style={styles.header}>{list.Name}</Text>
+          <Pressable
+            style={styles.changeNamebtn}
+            onPress={() => {
+              setChangeNameVisibility(true);
+            }}
+          >
+            <Image
+              style={styles.changeNameImg}
+              source={require("../assets/edit.png")}
+            ></Image>
+          </Pressable>
+        </View>
+        <View style={styles.locationBar}>
+          <SelectDropdown
+            defaultButtonText="Set Location"
+            buttonTextStyle={styles.dropdownText}
+            rowTextStyle={styles.dropdownText}
+            dropdownStyle={styles.dropdown}
+            rowStyle={styles.dropdownRow}
+            buttonStyle={styles.dropdown}
+            data={list.Orte}
+            onSelect={(selectedItem, index) => {
+              setPlace(selectedItem);
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem.Name;
+            }}
+            rowTextForSelection={(item, index) => {
+              return item.Name;
+            }}
           />
-        </View>
-        <View style={styles.btnrow}>
           <Pressable
-            style={styles.abtn}
+            style={styles.addLocbtn}
             onPress={() => {
-              setAddUserVisibility(true);
+              setAddLocationVisibility(true);
             }}
           >
-            <Text style={styles.btntext}>Add User</Text>
-          </Pressable>
-          <Pressable
-            style={styles.abtn}
-            onPress={() => {
-              setAddProductVisibility(true);
-            }}
-          >
-            <Text style={styles.btntext}>Add Product</Text>
+            <Text style={styles.addLocText}>Add Loc</Text>
           </Pressable>
         </View>
-        <PassiveButton text={"Go Back"} onPress={navigateBack}></PassiveButton>
+        <View style={styles.centered}>
+          <View style={styles.main}>
+            <FlatList
+              style={styles.list}
+              data={produkte}
+              renderItem={({ item }) => (
+                <View style={styles.container}>
+                  <Checkbox
+                    style={styles.check}
+                    value={item.Gekauft}
+                    onValueChange={async (value) => {
+                      await ChangeGekauft(value, item);
+                    }}
+                  ></Checkbox>
+                  <Text style={styles.itemText}>
+                    {item.Menge} {item.Name} | {item.Ort}
+                  </Text>
+                  <Pressable
+                    style={styles.deletebtn}
+                    onPress={async () => {
+                      setDelete(item);
+                    }}
+                  >
+                    <Image
+                      style={styles.delete}
+                      source={require("../assets/delete.png")}
+                    ></Image>
+                  </Pressable>
+                </View>
+              )}
+            />
+          </View>
+          <View style={styles.btnContainer}>
+            <View style={styles.btnrow}>
+              <Pressable
+                style={styles.abtn}
+                onPress={() => {
+                  setAddUserVisibility(true);
+                }}
+              >
+                <Text style={styles.btntext}>Add User</Text>
+              </Pressable>
+              <Pressable
+                style={styles.abtn}
+                onPress={() => {
+                  setAddProductVisibility(true);
+                }}
+              >
+                <Text style={styles.btntext}>Add Product</Text>
+              </Pressable>
+            </View>
+            <PassiveButton
+              text={"Go Back"}
+              onPress={navigateBack}
+            ></PassiveButton>
+          </View>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollV: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#070A0D",
+  },
   content: {
     width: "100%",
     height: "100%",
@@ -353,6 +367,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#18212F",
     borderColor: "#6482AF",
     borderWidth: 1,
+    width: "40%",
   },
   dropdownText: {
     color: "white",
@@ -364,7 +379,7 @@ const styles = StyleSheet.create({
   },
   addLocbtn: {
     backgroundColor: "#6482AF",
-    marginLeft: "20%",
+    marginLeft: "25%",
     width: "25%",
     borderRadius: 5,
     justifyContent: "center",
@@ -383,7 +398,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     width: "90%",
-    marginLeft: "5%",
+    marginLeft: "10%",
     marginBottom: 10,
   },
   itemText: {
@@ -432,8 +447,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   centered: {
-    height: "70%",
+    height: "100%",
     alignItems: "center",
+    paddingBottom: 250,
   },
   check: {
     marginLeft: 10,
@@ -449,5 +465,10 @@ const styles = StyleSheet.create({
   },
   changeNameImg: {
     width: 20,
+  },
+  btnContainer: {
+    height: "100%",
+    width: "100%",
+    alignItems: "center",
   },
 });

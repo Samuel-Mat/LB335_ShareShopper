@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   Modal,
+  ScrollView,
 } from "react-native";
 import {
   getFirestore,
@@ -62,37 +63,44 @@ export default function AddUserModal({
   }
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visibility}>
-      <View style={styles.main}>
-        <View style={styles.textContainer}>
-          <Text style={styles.header}>Add User</Text>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visibility}
+      supportedOrientations={["portrait", "landscape"]}
+    >
+      <ScrollView>
+        <View style={styles.main}>
+          <View style={styles.textContainer}>
+            <Text style={styles.header}>Add User</Text>
+          </View>
+          <View style={styles.inputmain}>
+            <Text style={styles.text}>Email</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => setEmail(text)}
+            ></TextInput>
+          </View>
+          <View style={styles.btnContainer}>
+            <ActiveButton
+              text={"Add"}
+              onPress={async () => {
+                AddUser();
+                await reload();
+                setVisibility(false);
+                setEmail("");
+              }}
+            ></ActiveButton>
+            <PassiveButton
+              text={"Close"}
+              onPress={() => {
+                setVisibility(false);
+                setEmail("");
+              }}
+            ></PassiveButton>
+          </View>
         </View>
-        <View style={styles.inputmain}>
-          <Text style={styles.text}>Email</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => setEmail(text)}
-          ></TextInput>
-        </View>
-        <View style={styles.btnContainer}>
-          <ActiveButton
-            text={"Add"}
-            onPress={async () => {
-              AddUser();
-              await reload();
-              setVisibility(false);
-              setEmail("");
-            }}
-          ></ActiveButton>
-          <PassiveButton
-            text={"Close"}
-            onPress={() => {
-              setVisibility(false);
-              setEmail("");
-            }}
-          ></PassiveButton>
-        </View>
-      </View>
+      </ScrollView>
     </Modal>
   );
 }
@@ -101,10 +109,9 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: "#070A0D",
     display: "flex",
-    marginTop: 50,
     width: "90%",
-    height: 380,
-    marginTop: 180,
+    height: "100%",
+    marginTop: 50,
     borderColor: "#6482AF",
     borderWidth: 3,
     marginLeft: "5%",
@@ -152,6 +159,6 @@ const styles = StyleSheet.create({
     width: "80%",
     marginLeft: "10%",
     alignItems: "center",
-    height: "100%",
+    height: "140%",
   },
 });

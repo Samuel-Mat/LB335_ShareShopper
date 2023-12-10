@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 24,
     width: "40%",
-    marginLeft: "5%",
+    marginLeft: "8%",
     marginRight: "30%",
   },
   logo: {
-    width: "20%",
-    height: "100%",
+    width: 100,
+    height: 100,
   },
 });
