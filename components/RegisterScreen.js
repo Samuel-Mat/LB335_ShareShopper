@@ -1,4 +1,11 @@
-import { Button, StyleSheet, Text, View, TextInput } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import firebaseConfig from "../firebaseConfig";
 import { useState } from "react";
@@ -37,53 +44,61 @@ export default function RegisterScreen({ onpressActive, onpressPassive }) {
     return "";
   };
   return (
-    <View style={styles.all}>
-      <Header></Header>
-      <View style={styles.content}>
-        <View style={styles.main}>
-          <Text style={styles.header}>Register</Text>
-          <View style={styles.inputmain}>
-            <Text style={styles.inputtext}>Email</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setState({ email: text, password: state.password })
-              }
-            ></TextInput>
+    <ScrollView style={styles.scrollV}>
+      <View style={styles.all}>
+        <Header></Header>
+        <View style={styles.content}>
+          <View style={styles.main}>
+            <Text style={styles.header}>Register</Text>
+            <View style={styles.inputmain}>
+              <Text style={styles.inputtext}>Email</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setState({ email: text, password: state.password })
+                }
+              ></TextInput>
+            </View>
+            <View style={styles.inputmain}>
+              <Text style={styles.inputtext}>Password</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) =>
+                  setState({ email: state.email, password: text })
+                }
+                secureTextEntry={true}
+              ></TextInput>
+            </View>
           </View>
-          <View style={styles.inputmain}>
-            <Text style={styles.inputtext}>Password</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) =>
-                setState({ email: state.email, password: text })
-              }
-              secureTextEntry={true}
-            ></TextInput>
-          </View>
+          <ActiveButton
+            style={styles.btn}
+            onPress={() => {
+              CreateUser();
+              onpressActive();
+            }}
+            text="Register"
+          ></ActiveButton>
+          <PassiveButton
+            style={styles.btn}
+            onPress={onpressPassive}
+            text="Back to Login"
+          ></PassiveButton>
         </View>
-        <ActiveButton
-          style={styles.btn}
-          onPress={() => {
-            CreateUser();
-            onpressActive();
-          }}
-          text="Register"
-        ></ActiveButton>
-        <PassiveButton
-          style={styles.btn}
-          onPress={onpressPassive}
-          text="Back to Login"
-        ></PassiveButton>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollV: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#070A0D",
+  },
   all: {
     height: "100%",
     backgroundColor: "#070A0D",
+    marginTop: "7%",
   },
   content: {
     alignItems: "center",

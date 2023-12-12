@@ -7,6 +7,10 @@ import {
   FlatList,
   Image,
   PixelRatio,
+  ScrollView,
+  SafeAreaView,
+  Pressable,
+  LogBox,
 } from "react-native";
 import { initializeApp } from "firebase/app";
 import { useState, useEffect } from "react";
@@ -29,7 +33,6 @@ import firebaseConfig from "../firebaseConfig";
 import TextInputField from "./TextInputField";
 import ActiveButton from "./ActiveButton";
 import PassiveButton from "./PassiveButton";
-import { Pressable } from "react-native";
 
 export default function HomeScreen({
   navigateToList,
@@ -70,6 +73,10 @@ export default function HomeScreen({
       console.error("Error getting documents: ", error);
     }
   }
+
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   async function deleteList() {
     try {
@@ -125,74 +132,84 @@ export default function HomeScreen({
   }, [removedList]);
 
   return (
-    <View style={styles.content}>
-      <View style={styles.headerBar}>
-        <Text style={styles.header}>Shoppinglists</Text>
-        <Pressable
-          onPress={async () => {
-            console.log("=======================refresh");
-            await getData();
-          }}
-        >
-          <Image
-            style={styles.delete}
-            source={require("../assets/refresh.png")}
-          ></Image>
-        </Pressable>
-      </View>
-      <View style={styles.centered}>
-        <View style={styles.main}>
-          <FlatList
-            style={styles.list}
-            data={lists}
-            renderItem={({ item }) => (
-              <View style={styles.container}>
-                <Text
-                  style={styles.itemText}
-                  onPress={async () => {
-                    await setList(item.id);
-                    navigateToList();
-                  }}
-                >
-                  {JSON.parse(item.data).Name}
-                </Text>
-                <Pressable
-                  onPress={() => {
-                    setDelete(item);
-                  }}
-                >
-                  <Image
-                    style={styles.delete}
-                    source={require("../assets/delete.png")}
-                  ></Image>
-                </Pressable>
-              </View>
-            )}
-          />
+    <ScrollView style={styles.scrollV}>
+      <View style={styles.content}>
+        <View style={styles.headerBar}>
+          <Text style={styles.header}>Shoppinglists</Text>
+          <Pressable
+            onPress={async () => {
+              console.log("=======================refresh");
+              await getData();
+            }}
+          >
+            <Image
+              style={styles.delete}
+              source={require("../assets/refresh.png")}
+            ></Image>
+          </Pressable>
         </View>
-        <ActiveButton
-          style={styles.btn}
-          text="New Shoppinglist"
-          onPress={newListNavigation}
-        ></ActiveButton>
-        <PassiveButton
-          text={"Log out"}
-          onPress={() => {
-            signOut(auth);
-            onpressPassive();
-          }}
-        ></PassiveButton>
+        <View style={styles.centered}>
+          <View style={styles.main}>
+            <FlatList
+              style={styles.list}
+              data={lists}
+              renderItem={({ item }) => (
+                <View style={styles.container}>
+                  <Text
+                    style={styles.itemText}
+                    onPress={async () => {
+                      await setList(item.id);
+                      navigateToList();
+                    }}
+                  >
+                    {JSON.parse(item.data).Name}
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      setDelete(item);
+                    }}
+                  >
+                    <Image
+                      style={styles.delete}
+                      source={require("../assets/delete.png")}
+                    ></Image>
+                  </Pressable>
+                </View>
+              )}
+            />
+          </View>
+          <View style={styles.btnContainer}>
+            <ActiveButton
+              style={styles.btn}
+              text="New Shoppinglist"
+              onPress={newListNavigation}
+            ></ActiveButton>
+            <PassiveButton
+              text={"Log out"}
+              onPress={() => {
+                signOut(auth);
+                onpressPassive();
+              }}
+            ></PassiveButton>
+          </View>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollV: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#070A0D",
+  },
   content: {
     display: "flex",
     width: "100%",
     height: "100%",
     backgroundColor: "#070A0D",
+    marginBottom: 80,
   },
   header: {
     fontSize: PixelRatio.getFontScale() * 29,
@@ -212,7 +229,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    height: "60%",
+    height: "40%",
     marginBottom: 50,
     alignItems: "center",
   },
@@ -242,9 +259,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 22,
   },
-  btn: {},
+  btnContainer: {
+    height: "100%",
+    width: "100%",
+    alignItems: "center",
+  },
   centered: {
-    height: "70%",
+    height: "100%",
     alignItems: "center",
   },
 });

@@ -1,11 +1,12 @@
 //Library imports
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, Dimensions } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { RootSiblingParent } from "react-native-root-siblings";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 //Screens
 import LoginScreen from "./components/LoginScreen";

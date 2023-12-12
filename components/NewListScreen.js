@@ -5,6 +5,7 @@ import {
   TextInput,
   Pressable,
   Image,
+  ScrollView,
 } from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import firebaseConfig from "../firebaseConfig";
@@ -80,54 +81,64 @@ export default function NewListScreen({ onpressActive, onpressPassive }) {
   }
 
   return (
-    <View style={styles.content}>
-      <View style={styles.main}>
-        <Text style={styles.header}>New List</Text>
-        <View style={styles.inputmain}>
-          <Text style={styles.inputtext}>Name</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => setName(text)}
-          ></TextInput>
+    <ScrollView style={styles.scrollV}>
+      <View style={styles.content}>
+        <View style={styles.main}>
+          <Text style={styles.header}>New List</Text>
+          <View style={styles.inputmain}>
+            <Text style={styles.inputtext}>Name</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => setName(text)}
+            ></TextInput>
+          </View>
+          <View style={styles.inputmain}>
+            <Text style={styles.inputtext}>Users</Text>
+            <TextInput
+              inputMode="email"
+              textContentType="emailAddress"
+              style={styles.input}
+              onChangeText={(text) => {
+                setsingleUser(text);
+              }}
+            ></TextInput>
+
+            <Pressable onPress={AddUserToList} style={styles.addUserbtn}>
+              <Image
+                style={styles.addUserImg}
+                source={require("../assets/addUser.png")}
+              ></Image>
+            </Pressable>
+          </View>
         </View>
-        <View style={styles.inputmain}>
-          <Text style={styles.inputtext}>Users</Text>
-          <TextInput
-            inputMode="email"
-            textContentType="emailAddress"
-            style={styles.input}
-            onChangeText={(text) => {
-              setsingleUser(text);
+        <View style={styles.btnContainer}>
+          <ActiveButton
+            style={styles.btn}
+            onPress={async () => {
+              CreateList();
+              onpressActive();
             }}
-          ></TextInput>
-          <Pressable onPress={AddUserToList} style={styles.addUserbtn}>
-            <Image
-              style={styles.addUserImg}
-              source={require("../assets/addUser.png")}
-            ></Image>
-          </Pressable>
+            text="Create"
+          ></ActiveButton>
+          <PassiveButton
+            style={styles.btn}
+            onPress={async () => {
+              onpressPassive();
+            }}
+            text="Back to Home"
+          ></PassiveButton>
         </View>
       </View>
-      <ActiveButton
-        style={styles.btn}
-        onPress={async () => {
-          CreateList();
-          onpressActive();
-        }}
-        text="Create"
-      ></ActiveButton>
-      <PassiveButton
-        style={styles.btn}
-        onPress={async () => {
-          onpressPassive();
-        }}
-        text="Back to Home"
-      ></PassiveButton>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollV: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#070A0D",
+  },
   content: {
     alignItems: "center",
     width: "100%",
@@ -180,5 +191,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
+  },
+  btnContainer: {
+    marginTop: "5%",
+    height: "100%",
+    width: "100%",
+    alignItems: "center",
   },
 });

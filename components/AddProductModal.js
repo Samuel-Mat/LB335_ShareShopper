@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   Modal,
+  ScrollView,
 } from "react-native";
 import {
   getFirestore,
@@ -76,63 +77,70 @@ export default function AddProductModal({
   }
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visibility}>
-      <View style={styles.main}>
-        <View style={styles.textContainer}>
-          <Text style={styles.header}>Add Product</Text>
-        </View>
-        <View style={styles.inputmain}>
-          <Text style={styles.text}>Name</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => setName(text)}
-          ></TextInput>
-        </View>
-        <View style={styles.inputmain}>
-          <Text style={styles.text}>Amount</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => setAmount(text)}
-          ></TextInput>
-        </View>
-        <Picker
-          style={styles.locationPicker}
-          selectedValue={location}
-          onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
-        >
-          <Picker.Item
-            label={"No Location"}
-            value={""}
-            color="white"
-          ></Picker.Item>
-          {locations &&
-            locations.map((item, index) => (
-              <Picker.Item
-                key={index}
-                label={item.Name}
-                value={item.Name}
-                color="white"
-              />
-            ))}
-        </Picker>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visibility}
+      supportedOrientations={["portrait", "landscape"]}
+    >
+      <ScrollView>
+        <View style={styles.main}>
+          <View style={styles.textContainer}>
+            <Text style={styles.header}>Add Product</Text>
+          </View>
+          <View style={styles.inputmain}>
+            <Text style={styles.text}>Name</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => setName(text)}
+            ></TextInput>
+          </View>
+          <View style={styles.inputmain}>
+            <Text style={styles.text}>Amount</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => setAmount(text)}
+            ></TextInput>
+          </View>
+          <Picker
+            style={styles.locationPicker}
+            selectedValue={location}
+            onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
+          >
+            <Picker.Item
+              label={"No Location"}
+              value={""}
+              color="white"
+            ></Picker.Item>
+            {locations &&
+              locations.map((item, index) => (
+                <Picker.Item
+                  key={index}
+                  label={item.Name}
+                  value={item.Name}
+                  color="white"
+                />
+              ))}
+          </Picker>
 
-        <View style={styles.btnContainer}>
-          <ActiveButton
-            text={"Add"}
-            onPress={async () => {
-              AddProduct();
-              await reload();
-              setVisibility(false);
-            }}
-          ></ActiveButton>
-          <PassiveButton
-            text={"Close"}
-            onPress={() => {
-              setVisibility(false);
-            }}
-          ></PassiveButton>
+          <View style={styles.btnContainer}>
+            <ActiveButton
+              text={"Add"}
+              onPress={async () => {
+                AddProduct();
+                await reload();
+                setVisibility(false);
+              }}
+            ></ActiveButton>
+            <PassiveButton
+              text={"Close"}
+              onPress={() => {
+                setVisibility(false);
+              }}
+            ></PassiveButton>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </Modal>
   );
 }

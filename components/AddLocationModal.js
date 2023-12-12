@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   Modal,
+  ScrollView,
 } from "react-native";
 import {
   getFirestore,
@@ -95,55 +96,62 @@ export default function AddLocationModal({
   }
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visibility}>
-      <View style={styles.main}>
-        <View style={styles.textContainer}>
-          <Text style={styles.header}>Add Location</Text>
-        </View>
-        <View style={styles.inputmain}>
-          <Text style={styles.text}>Location Name</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => setName(text)}
-          ></TextInput>
-        </View>
-        <View style={styles.mapContainer}>
-          <View style={styles.map}>
-            <MapView
-              style={{ alignSelf: "stretch", height: "100%" }}
-              region={mapRegion}
-            >
-              <Marker
-                draggable
-                coordinate={geoLocation}
-                onDragEnd={(e) => {
-                  setLocation({
-                    latitude: e.nativeEvent.coordinate.latitude,
-                    longitude: e.nativeEvent.coordinate.longitude,
-                  });
-                  console.log(geoLocation);
-                }}
-              />
-            </MapView>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visibility}
+      supportedOrientations={["portrait", "landscape"]}
+    >
+      <ScrollView>
+        <View style={styles.main}>
+          <View style={styles.textContainer}>
+            <Text style={styles.header}>Add Location</Text>
+          </View>
+          <View style={styles.inputmain}>
+            <Text style={styles.text}>Location Name</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => setName(text)}
+            ></TextInput>
+          </View>
+          <View style={styles.mapContainer}>
+            <View style={styles.map}>
+              <MapView
+                style={{ alignSelf: "stretch", height: "100%" }}
+                region={mapRegion}
+              >
+                <Marker
+                  draggable
+                  coordinate={geoLocation}
+                  onDragEnd={(e) => {
+                    setLocation({
+                      latitude: e.nativeEvent.coordinate.latitude,
+                      longitude: e.nativeEvent.coordinate.longitude,
+                    });
+                    console.log(geoLocation);
+                  }}
+                />
+              </MapView>
+            </View>
+          </View>
+          <View style={styles.btnContainer}>
+            <ActiveButton
+              text={"Add"}
+              onPress={async () => {
+                AddLocation();
+                await reload();
+                setVisibility(false);
+              }}
+            ></ActiveButton>
+            <PassiveButton
+              text={"Close"}
+              onPress={() => {
+                setVisibility(false);
+              }}
+            ></PassiveButton>
           </View>
         </View>
-        <View style={styles.btnContainer}>
-          <ActiveButton
-            text={"Add"}
-            onPress={async () => {
-              AddLocation();
-              await reload();
-              setVisibility(false);
-            }}
-          ></ActiveButton>
-          <PassiveButton
-            text={"Close"}
-            onPress={() => {
-              setVisibility(false);
-            }}
-          ></PassiveButton>
-        </View>
-      </View>
+      </ScrollView>
     </Modal>
   );
 }
@@ -153,12 +161,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#070A0D",
     display: "flex",
     width: "90%",
-    height: "90%",
     marginTop: 50,
     borderColor: "#6482AF",
     borderWidth: 3,
     marginLeft: "5%",
     borderRadius: 40,
+    marginBottom: "40%",
   },
   header: {
     color: "white",
