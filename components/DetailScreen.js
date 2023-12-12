@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    height: "60%",
+    height: "40%",
     marginBottom: 50,
     alignItems: "center",
   },
@@ -420,6 +420,9 @@ const styles = StyleSheet.create({
   },
   list: {
     width: "80%",
+  },
+  deletebtn: {
+    alignItems: "center",
   },
   delete: {
     backgroundColor: "#6482AF",
@@ -453,6 +456,7 @@ const styles = StyleSheet.create({
   },
   check: {
     marginLeft: 10,
+    padding: 10,
   },
   changeNamebtn: {
     backgroundColor: "#6482AF",
