@@ -54,7 +54,7 @@ export default function LoginScreen({ onpressActive, onpressPassive }) {
     console.log("Success: " + success);
 
     if (success) {
-      onpressActive(); // Move this inside the useEffect
+      onpressActive();
     }
   }, []);
 
